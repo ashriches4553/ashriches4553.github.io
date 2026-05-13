@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agriculture in an Arid Kingdom</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #c8a96e;
+    --gold: #b8913a;
+    --deep-gold: #9a7528;
+    --cream: #f5efe3;
+    --cream-soft: #ede5d4;
+    --charcoal: #2c2416;
+    --charcoal-light: #3d3120;
+    --dark-brown: #1a1208;
+    --forest-green: #3d6b4f;
+    --forest-green-light: #4d7d60;
+    --forest-green-pale: #5a8a6a;
+    --orange-warm: #c9672a;
+    --white-soft: #f9f4ec;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Crimson Pro', 'Cormorant Garamond', Georgia, serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    line-height: 1.7;
+  }
+
+  /* ======== NAVBAR ======== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 48px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(18, 10, 3, 0.82);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184, 145, 58, 0.18);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--sand);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13.5px;
+    color: rgba(245, 239, 227, 0.75);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.25s;
+  }
+
+  .nav-links a:hover { color: var(--sand); }
+
+  /* ======== SCROLL TO TOP ======== */
+  .scroll-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 999;
+    width: 42px;
+    height: 42px;
+    background: var(--deep-gold);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .scroll-top:hover { background: var(--gold); transform: translateY(-2px); }
+  .scroll-top svg { width: 16px; height: 16px; }
+
+  /* ======== GOLD DIVIDER ======== */
+  .gold-divider {
+    width: 52px;
+    height: 2px;
+    background: var(--gold);
+    margin: 22px 0 28px;
+  }
+
+  /* ======== PAGE 1: HERO ======== */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: #100b04;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 80%, rgba(90,55,15,0.55) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 40% at 30% 60%, rgba(60,35,5,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 60% at 70% 50%, rgba(40,20,5,0.3) 0%, transparent 60%),
+      linear-gradient(185deg, #0e0903 0%, #1c1005 35%, #2a1a08 55%, #1a1005 75%, #0d0802 100%);
+  }
+
+  /* Desert texture overlay */
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+
+  /* Dune silhouette */
+  .hero-dunes {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 260px;
+    background:
+      radial-gradient(ellipse 70% 100% at 20% 100%, #1e1206 0%, transparent 60%),
+      radial-gradient(ellipse 80% 90% at 80% 100%, #1a1004 0%, transparent 55%),
+      radial-gradient(ellipse 50% 80% at 50% 100%, #231508 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+    padding: 0 32px;
+    animation: heroFadeIn 1.4s ease both;
+  }
+
+  @keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11.5px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 24px;
+    opacity: 0.85;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 74px);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--sand);
+    background: linear-gradient(135deg, #c8a96e, #9a7528);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(16px, 2vw, 20px);
+    color: rgba(245,239,227,0.68);
+    font-weight: 300;
+    max-width: 580px;
+    margin: 0 auto 52px;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    justify-content: center;
+    border-top: 1px solid rgba(184,145,58,0.22);
+    border-bottom: 1px solid rgba(184,145,58,0.22);
+    padding: 22px 0;
+    margin-bottom: 56px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    padding: 8px 36px;
+    border-right: 1px solid rgba(184,145,58,0.2);
+    text-align: center;
+  }
+  .hero-stat:last-child { border-right: none; }
+
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 30px);
+    font-weight: 600;
+    color: var(--sand);
+    display: block;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .hero-stat-label {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,239,227,0.5);
+    display: block;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+    animation: scrollPulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) translateY(0); }
+    50% { opacity: 0.9; transform: translateX(-50%) translateY(5px); }
+  }
+
+  .scroll-indicator span {
+    font-family: 'Crimson Pro', serif;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(200,169,110,0.6);
+  }
+
+  .scroll-indicator-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(184,145,58,0.6), transparent);
+  }
+
+  /* ======== PAGE 2: OVERVIEW ======== */
+  #overview {
+    background: #f7f0e3;
+    padding: 110px 0 90px;
+  }
+
+  .section-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: start;
+  }
+
+  .section-label {
+    font-family: 'Crimson Pro', serif;
+    font-size: 10.5px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 3.5vw, 48px);
+    font-weight: 600;
+    line-height: 1.12;
+    color: var(--charcoal);
+  }
+
+  .section-heading em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--forest-green);
+  }
+
+  .body-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17.5px;
+    color: var(--charcoal);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .body-text .green { color: var(--forest-green); font-weight: 400; }
+
+  .quote-card {
+    background: var(--forest-green);
+    padding: 48px 44px;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .quote-card p {
+    font-family: 'Playfair Display', serif;
+    font-size: 18.5px;
+    font-style: italic;
+    font-weight: 400;
+    color: rgba(255,255,255,0.92);
+    line-height: 1.75;
+  }
+
+  .quote-card::before {
+    content: '\201C';
+    position: absolute;
+    top: 16px;
+    left: 28px;
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: rgba(255,255,255,0.12);
+    line-height: 1;
+  }
+
+  /* ======== PAGE 3: WATER ======== */
+  #water {
+    background: #18100a;
+    padding: 110px 0 0;
+  }
+
+  #water .section-heading { color: var(--cream); }
+  #water .section-label { color: var(--gold); }
+
+  .water-intro {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17.5px;
+    color: rgba(245,239,227,0.7);
+    line-height: 1.8;
+    margin-bottom: 52px;
+    max-width: 740px;
+    font-weight: 300;
+  }
+
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid rgba(61,107,79,0.4);
+    margin-top: 0;
+  }
+
+  .stat-card {
+    background: var(--forest-green);
+    padding: 52px 44px 48px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+  }
+  .stat-card:last-child { border-right: none; }
+
+  .stat-big {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 6vw, 78px);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .stat-card-label {
+    font-family: 'Crimson Pro', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,239,227,0.55);
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .stat-card p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15.5px;
+    color: rgba(245,239,227,0.72);
+    line-height: 1.72;
+    font-weight: 300;
+  }
+
+  /* ======== PAGE 4: HISTORY ======== */
+  #history {
+    background: var(--cream-soft);
+    padding: 110px 0 90px;
+  }
+
+  .timeline {
+    margin-top: 52px;
+    position: relative;
+    padding-left: 52px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold), rgba(184,145,58,0.15));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 48px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -47px;
+    top: 9px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--charcoal);
+    border: 2px solid var(--gold);
+  }
+
+  .timeline-date {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .timeline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+  }
+
+  .timeline-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16.5px;
+    color: #3d3120;
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 680px;
+  }
+
+  /* ======== PAGE 5: GREENHOUSE ======== */
+  #greenhouse {
+    background: var(--cream);
+    padding: 110px 0 90px;
+  }
+
+  .greenhouse-stat-card {
+    background: var(--forest-green);
+    padding: 40px 44px 36px;
+    margin-bottom: 32px;
+    border-radius: 2px;
+  }
+
+  .greenhouse-big-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 6vw, 72px);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .greenhouse-num-label {
+    font-family: 'Crimson Pro', serif;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(245,239,227,0.55);
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .greenhouse-growth {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .growth-arrow {
+    color: var(--gold);
+    font-size: 13px;
+  }
+
+  .growth-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13.5px;
+    color: rgba(245,239,227,0.72);
+    letter-spacing: 0.04em;
+  }
+
+  .greenhouse-stat-card p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14.5px;
+    color: rgba(245,239,227,0.7);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .lead-sentence {
+    color: var(--orange-warm);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .bar-chart {
+    margin-top: 32px;
+  }
+
+  .bar-chart-label-top {
+    font-family: 'Crimson Pro', serif;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 44px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .bar-crop {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14.5px;
+    color: var(--charcoal);
+    text-align: right;
+  }
+
+  .bar-track {
+    height: 22px;
+    background: rgba(61,107,79,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--forest-green);
+    border-radius: 2px;
+    transition: width 0.8s ease;
+  }
+
+  .bar-pct {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13.5px;
+    color: var(--charcoal);
+    opacity: 0.7;
+  }
+
+  /* ======== PAGE 6: VISION 2030 ======== */
+  #vision {
+    background: var(--cream-soft);
+    padding: 110px 0 90px;
+  }
+
+  .vision-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 48px;
+    border: 1px solid rgba(184,145,58,0.22);
+  }
+
+  .vision-card {
+    padding: 36px 28px 32px;
+    border-right: 1px solid rgba(184,145,58,0.18);
+    position: relative;
+  }
+  .vision-card:last-child { border-right: none; }
+
+  .vision-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .vision-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .vision-card p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    color: #3d3120;
+    line-height: 1.72;
+    font-weight: 300;
+  }
+
+  /* ======== PAGE 7: VIDEO + QUIZ ======== */
+  #quiz {
+    background: var(--dark-brown);
+    padding: 110px 0 80px;
+  }
+
+  #quiz .section-heading { color: var(--cream); }
+  #quiz .section-label { color: var(--gold); }
+
+  .video-wrap {
+    margin: 44px 0 60px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .video-wrap iframe {
+    border-radius: 6px;
+    display: block;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .quiz-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 44px;
+  }
+
+  .quiz-intro {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    color: rgba(245,239,227,0.7);
+    line-height: 1.75;
+    margin-bottom: 48px;
+    font-weight: 300;
+    font-style: italic;
+    max-width: 660px;
+  }
+
+  .quiz-q {
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(184,145,58,0.12);
+    padding-bottom: 36px;
+  }
+
+  .quiz-q:last-child { border-bottom: none; }
+
+  .quiz-q-num {
+    font-family: 'Crimson Pro', serif;
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .quiz-q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 18px;
+    line-height: 1.45;
+  }
+
+  /* Interactive quiz options */
+  .quiz-options {
+    list-style: none;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-option-btn {
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(184,145,58,0.2);
+    border-radius: 3px;
+    padding: 13px 18px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    color: rgba(245,239,227,0.75);
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+    line-height: 1.45;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .quiz-option-btn:hover:not(:disabled) {
+    background: rgba(184,145,58,0.1);
+    border-color: rgba(184,145,58,0.5);
+    color: var(--cream);
+  }
+
+  .quiz-option-btn:disabled { cursor: default; }
+
+  .quiz-option-btn.correct-answer {
+    background: rgba(61,107,79,0.28);
+    border-color: var(--forest-green-pale);
+    color: #8ec9a4;
+  }
+
+  .quiz-option-btn.wrong-answer {
+    background: rgba(180,60,40,0.18);
+    border-color: rgba(200,80,60,0.5);
+    color: rgba(245,180,170,0.85);
+  }
+
+  .quiz-option-btn.reveal-correct {
+    background: rgba(61,107,79,0.15);
+    border-color: rgba(90,138,106,0.4);
+    color: rgba(142,201,164,0.7);
+  }
+
+  .option-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(184,145,58,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    transition: all 0.18s;
+  }
+
+  .quiz-option-btn.correct-answer .option-icon {
+    background: var(--forest-green);
+    border-color: var(--forest-green-pale);
+    color: white;
+  }
+
+  .quiz-option-btn.wrong-answer .option-icon {
+    background: rgba(180,60,40,0.5);
+    border-color: rgba(200,80,60,0.6);
+    color: white;
+  }
+
+  .quiz-option-btn.reveal-correct .option-icon {
+    background: rgba(61,107,79,0.3);
+    border-color: rgba(90,138,106,0.5);
+    color: rgba(142,201,164,0.8);
+  }
+
+  .quiz-feedback {
+    margin-top: 14px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 14.5px;
+    font-style: italic;
+    line-height: 1.6;
+    display: none;
+    padding: 12px 16px;
+    border-radius: 3px;
+    border-left: 3px solid;
+  }
+
+  .quiz-feedback.show { display: block; }
+
+  .quiz-feedback.fb-correct {
+    color: #8ec9a4;
+    background: rgba(61,107,79,0.15);
+    border-color: var(--forest-green-pale);
+  }
+
+  .quiz-feedback.fb-wrong {
+    color: rgba(245,195,185,0.85);
+    background: rgba(180,60,40,0.12);
+    border-color: rgba(200,80,60,0.4);
+  }
+
+  /* Short answer */
+  .short-answer-wrap {
+    margin-top: 6px;
+  }
+
+  .short-answer-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(184,145,58,0.22);
+    border-radius: 3px;
+    padding: 13px 16px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    color: var(--cream);
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.18s;
+    line-height: 1.55;
+  }
+
+  .short-answer-input::placeholder { color: rgba(245,239,227,0.28); }
+  .short-answer-input:focus { border-color: rgba(184,145,58,0.5); }
+
+  .short-answer-submit {
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid rgba(184,145,58,0.4);
+    color: var(--sand);
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 9px 22px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+
+  .short-answer-submit:hover {
+    background: rgba(184,145,58,0.12);
+    color: var(--cream);
+  }
+
+  .short-answer-submit:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .model-answer {
+    margin-top: 14px;
+    display: none;
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    color: rgba(245,239,227,0.62);
+    font-style: italic;
+    line-height: 1.65;
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid rgba(184,145,58,0.4);
+    padding: 12px 16px;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .model-answer.show { display: block; }
+
+  .model-answer strong {
+    color: var(--sand);
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .model-answer ul {
+    padding-left: 18px;
+    margin-top: 4px;
+  }
+
+  .model-answer li { margin-bottom: 4px; }
+
+  /* Score summary */
+  .quiz-score-bar {
+    margin-top: 56px;
+    padding: 36px 40px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(184,145,58,0.2);
+    border-radius: 4px;
+    display: none;
+  }
+
+  .quiz-score-bar.show { display: block; }
+
+  .score-label {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .score-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .score-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    color: rgba(245,239,227,0.55);
+    font-style: italic;
+    margin-bottom: 22px;
+  }
+
+  .score-track {
+    height: 5px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--forest-green), var(--forest-green-pale));
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+
+  .retry-btn {
+    background: transparent;
+    border: 1px solid rgba(184,145,58,0.4);
+    color: var(--sand);
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 10px 26px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(184,145,58,0.12);
+    color: var(--cream);
+  }
+
+  /* ======== FOOTER ======== */
+  #footer {
+    background: #ede7d8;
+    padding: 80px 0 64px;
+    border-top: 1px solid rgba(184,145,58,0.22);
+  }
+
+  .footer-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--charcoal);
+    letter-spacing: 0.06em;
+    margin-bottom: 32px;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+  }
+
+  .refs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 64px;
+  }
+
+  .ref-item {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13.5px;
+    color: #4a3e2c;
+    line-height: 1.72;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(184,145,58,0.15);
+  }
+
+  .ref-item a {
+    color: var(--forest-green);
+    text-decoration: none;
+    word-break: break-all;
+  }
+
+  .ref-item a:hover { text-decoration: underline; }
+
+  .footer-bottom {
+    margin-top: 48px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(184,145,58,0.2);
+    font-family: 'Crimson Pro', serif;
+    font-size: 12px;
+    color: rgba(74,62,44,0.5);
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <span class="nav-logo">Agriculture in an Arid Kingdom</span>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#water">Water</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#greenhouse">Greenhouse</a></li>
+    <li><a href="#vision">Vision 2030</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<!-- SCROLL TO TOP -->
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll to top">
+  <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3,10 8,4 13,10"/>
+  </svg>
+</button>
+
+<!-- PAGE 1: HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dunes"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">A Documentary Study &nbsp;·&nbsp; Saudi Arabia</p>
+    <h1 class="hero-title">Agriculture in an <em>Arid</em> Kingdom</h1>
+    <p class="hero-subtitle">Saudi Arabia has no permanent rivers barely any rain and a growing population. this is how the country is trying to make it work.</p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">88%</span>
+        <span class="hero-stat-label">Freshwater used by agriculture</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">62%</span>
+        <span class="hero-stat-label">Water from groundwater</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">797K</span>
+        <span class="hero-stat-label">Tons of greenhouse vegetables</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">$34.4T</span>
+        <span class="hero-stat-label">Natural resources value</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Scroll to Explore</span>
+    <div class="scroll-indicator-line"></div>
+  </div>
+</section>
+
+<!-- PAGE 2: OVERVIEW -->
+<section id="overview">
+  <div class="section-inner">
+    <div class="two-col">
+      <!-- Left -->
+      <div>
+        <span class="section-label">Overview</span>
+        <h2 class="section-heading">A sector shaped by<br><em>scarcity</em></h2>
+        <div class="gold-divider"></div>
+
+        <p class="body-text">Farming in Saudi Arabia is not easy. The climate is arid and the land is mostly desert, which causes very little natural water. Agriculture creates jobs, supports food security and contributes to the economy.</p>
+
+        <p class="body-text">There are no permanent rivers, no lakes that refill with the seasons. Most of the water comes from ancient underground reserves. These are <span class="green">fossil aquifers</span> that built up thousands of years ago. They have been getting drawn down ever since and they do not replenish on any timescale that matters.</p>
+
+        <p class="body-text">Agriculture's share of the economy has shrunk in recent years but it has not been abandoned. <span class="green">Vision 2030</span> keeps it on the agenda, partly because food security is a real concern for a country this dependent on oil revenue and food imports.</p>
+      </div>
+
+      <!-- Right: Quote card -->
+      <div>
+        <div class="quote-card">
+          <p>"Using resources efficiently and promoting productive practices of agriculture, less dependent on scarce water, can help ensure long-term food security."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 3: WATER -->
+<section id="water">
+  <div class="section-inner">
+    <span class="section-label">Water Supply</span>
+    <h2 class="section-heading">Where the water<br><em>comes from</em></h2>
+    <div class="gold-divider"></div>
+    <p class="water-intro">Most of the country's water comes from underground. That might sound fine until you realise those reserves took thousands of years to accumulate and we are using them far faster than they can recover. Here is how the supply currently breaks down.</p>
+  </div>
+
+  <div class="stat-cards">
+    <div class="stat-card">
+      <span class="stat-big">62%</span>
+      <span class="stat-card-label">Groundwater</span>
+      <p>The country's main water source. These underground reserves took millennia to form and by 2004 had already dropped by up to 60% since 1979. They are not going to refill.</p>
+    </div>
+    <div class="stat-card">
+      <span class="stat-big">22%</span>
+      <span class="stat-card-label">Desalinated Water</span>
+      <p>Saudi Arabia is now one of the world's biggest producers of desalinated seawater. It is costly and energy intensive but the government sees it as the most realistic long-term answer.</p>
+    </div>
+    <div class="stat-card">
+      <span class="stat-big">16%</span>
+      <span class="stat-card-label">Other Sources</span>
+      <p>Treated wastewater and surface water make up the rest. The southwest gets the most rain in the country but even there it is nowhere near enough to support farming at scale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 4: HISTORY -->
+<section id="history">
+  <div class="section-inner">
+    <span class="section-label">Historical Context</span>
+    <h2 class="section-heading">A century of <em>policy shifts</em></h2>
+    <div class="gold-divider"></div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-date">1970s</span>
+        <div class="timeline-title">Irrigation Expansion</div>
+        <p class="timeline-text">The 1970s saw a push to expand farming across the country. Most of the water needed came from underground reserves and no one was worried yet about what that meant long term.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">Late 20th Century</span>
+        <div class="timeline-title">Wheat Incentive Schemes</div>
+        <p class="timeline-text">To chase self-sufficiency in wheat, the government started buying it from farmers at three times the going rate. Production increased. So did the groundwater use.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">Early 1990s</span>
+        <div class="timeline-title">Oversupply &amp; Cutbacks</div>
+        <p class="timeline-text">The scheme worked too well. Oversupply drove prices down from around 3,500 to 1,000 riyals per tonne and farmers stopped producing due to lower profits. Saudi wheat production collapsed and the country leaned harder on imports.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">1990s</span>
+        <div class="timeline-title">Centre Pivot Irrigation</div>
+        <p class="timeline-text">Through the 1990s, Saudi Arabia invested in centre pivot irrigation, which is a huge circular sprinkler systems visible from the air. By the early 2000s two thirds of farmland was using them.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">2005</span>
+        <div class="timeline-title">Aquifer Crisis Recognised</div>
+        <p class="timeline-text">A government report explained aquifer levels had fallen by up to 60% in roughly 25 years.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">2016–Present</span>
+        <div class="timeline-title">Vision 2030 &amp; Diversification</div>
+        <p class="timeline-text">Vision 2030 marked a real shift in how agriculture is planned. It caused less open field farming, more greenhouses and hydroponics. In addition, less fossil water, and more desalination. The goal is food production the country is able to sustain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 5: GREENHOUSE -->
+<section id="greenhouse">
+  <div class="section-inner">
+    <div class="two-col">
+      <!-- Left -->
+      <div>
+        <span class="section-label">Modern Agriculture</span>
+        <h2 class="section-heading">Greenhouse<br><em>cultivation</em></h2>
+        <div class="gold-divider"></div>
+
+        <div class="greenhouse-stat-card">
+          <span class="greenhouse-big-num">797K</span>
+          <span class="greenhouse-num-label">Thousand tons of vegetables</span>
+          <div class="greenhouse-growth">
+            <span class="growth-arrow">▲</span>
+            <span class="growth-text">10.6% growth vs 2023</span>
+          </div>
+          <p>Tomatoes are the most produced crop, followed by cucumbers. Greenhouses cover 7.8 thousand hectares of cultivated land, cutting water loss and easing pressure on already used reserves.</p>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div>
+        <p class="body-text">Greenhouses work better here than open fields. They cut <span class="green">water loss dramatically</span> and let farmers grow crops in a controlled environment without relying on soil or rainfall. The government has been pushing for more of them and the numbers show it is working.</p>
+
+        <p class="body-text">Water for those greenhouses often comes from desalination. Saudi Arabia produces about 20% of the world's desalinated water, enough to keep farms running year round despite a climate that offers almost nothing else to work with.</p>
+
+        <p class="body-text"><span class="lead-sentence">It is not a perfect solution.</span> Greenhouses eat a lot of energy and desalination produces significant carbon emissions. But compared to draining ancient aquifers to irrigate open desert both are considerably less destructive in the long run.</p>
+
+        <div class="bar-chart">
+          <span class="bar-chart-label-top">Top Greenhouse Crops by Volume</span>
+          <div class="bar-row">
+            <span class="bar-crop">Tomatoes</span>
+            <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+            <span class="bar-pct">90%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-crop">Cucumbers</span>
+            <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+            <span class="bar-pct">65%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-crop">Peppers</span>
+            <div class="bar-track"><div class="bar-fill" style="width:38%"></div></div>
+            <span class="bar-pct">38%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-crop">Leafy Greens</span>
+            <div class="bar-track"><div class="bar-fill" style="width:22%"></div></div>
+            <span class="bar-pct">22%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 6: VISION 2030 -->
+<section id="vision">
+  <div class="section-inner">
+    <span class="section-label">Economic Diversification</span>
+    <h2 class="section-heading">The Vision <em>2030</em> agenda</h2>
+    <div class="gold-divider"></div>
+
+    <p class="body-text" style="max-width:700px; margin-bottom:0;">Oil money has kept Saudi Arabia running for decades. It made up nearly 68% of government revenue in 2019. Vision 2030 is the country's attempt to not depend on it as much. That figure had already dropped to 49.4% by 2025.</p>
+
+    <div class="vision-cards">
+      <div class="vision-card">
+        <div class="vision-card-title">Reducing Oil Dependency</div>
+        <p>Oil makes up the majority of the country's natural resources valued somewhere around $34.4 trillion. The longer it stays the main income source, the more vulnerable the economy is to wherever oil prices go next.</p>
+      </div>
+      <div class="vision-card">
+        <div class="vision-card-title">Artificial Intelligence</div>
+        <p>The Public Investment Fund is putting a lot of money into AI infrastructure like data centres, large language models and compute capacity. The bet is that Saudi Arabia can become a tech hub rather than just an energy exporter.</p>
+      </div>
+      <div class="vision-card">
+        <div class="vision-card-title">Tourism</div>
+        <p>Tourism has grown quickly from 3% of GDP in 2019 to 5% by 2024. The Government's target is 10% by 2030. Projects like NEOM and the Red Sea development are providing opportunities for tourists.</p>
+      </div>
+      <div class="vision-card">
+        <div class="vision-card-title">AgriTech &amp; Clean Energy</div>
+        <p>There is real investment going into agricultural technology like precision farming, hydroponics and smarter irrigation. The aim is to grow more food while using less of the water.</p>
+      </div>
+      <div class="vision-card">
+        <div class="vision-card-title">Public Services</div>
+        <p>Health, education and infrastructure are important — they are the basics of what a modern economy needs. Saudi Arabia is spending a lot on public services.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 7: VIDEO + QUIZ -->
+<section id="quiz">
+  <div class="section-inner">
+    <span class="section-label">Watch First</span>
+    <h2 class="section-heading">Aquifers <em>explained</em></h2>
+    <div class="gold-divider"></div>
+
+    <p class="quiz-intro">This video gives you more background on aquifers. Watch it first, then work through the quiz below to see how much you have taken in.</p>
+
+    <div class="video-wrap">
+      <iframe width="840" height="480" src="https://www.youtube.com/embed/yOuw1YjQBH0" title="Aquifers Explained" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:6px;"></iframe>
+    </div>
+
+    <h3 class="quiz-heading">Quiz: Saudi Arabia's Hidden Water</h3>
+
+    <!-- Q1 -->
+    <div class="quiz-q" id="q1">
+      <span class="quiz-q-num">Question 1 of 7</span>
+      <p class="quiz-q-text">According to the speaker, how long has the underground water been stored beneath the desert?</p>
+      <ul class="quiz-options">
+        <li><button class="quiz-option-btn" data-q="1" data-i="0" onclick="pickOption(this)"><span class="option-icon">A</span>Hundreds of years</button></li>
+        <li><button class="quiz-option-btn" data-q="1" data-i="1" onclick="pickOption(this)"><span class="option-icon">B</span>Thousands of years</button></li>
+        <li><button class="quiz-option-btn" data-q="1" data-i="2" onclick="pickOption(this)"><span class="option-icon">C</span>A Century</button></li>
+        <li><button class="quiz-option-btn" data-q="1" data-i="3" onclick="pickOption(this)"><span class="option-icon">D</span>Decades</button></li>
+      </ul>
+      <div class="quiz-feedback fb-correct" id="fb1-correct">Correct — the speaker explains the water has been stored for thousands of years beneath the desert.</div>
+      <div class="quiz-feedback fb-wrong" id="fb1-wrong">Not quite. Think about the timescale of fossil aquifer formation.</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-q" id="q2">
+      <span class="quiz-q-num">Question 2 of 7</span>
+      <p class="quiz-q-text">What phrase does the speaker use to describe the water beneath the desert?</p>
+      <ul class="quiz-options">
+        <li><button class="quiz-option-btn" data-q="2" data-i="0" onclick="pickOption(this)"><span class="option-icon">A</span>Hidden rivers</button></li>
+        <li><button class="quiz-option-btn" data-q="2" data-i="1" onclick="pickOption(this)"><span class="option-icon">B</span>Ancient water</button></li>
+        <li><button class="quiz-option-btn" data-q="2" data-i="2" onclick="pickOption(this)"><span class="option-icon">C</span>Deep reservoirs</button></li>
+        <li><button class="quiz-option-btn" data-q="2" data-i="3" onclick="pickOption(this)"><span class="option-icon">D</span>Underground lakes</button></li>
+      </ul>
+      <div class="quiz-feedback fb-correct" id="fb2-correct">Correct — the speaker refers to it as "ancient water."</div>
+      <div class="quiz-feedback fb-wrong" id="fb2-wrong">Not quite. Listen carefully to the specific phrase the speaker chooses.</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-q" id="q3">
+      <span class="quiz-q-num">Question 3 of 7</span>
+      <p class="quiz-q-text">Which crop is specifically mentioned in the video as requiring massive amounts of water in the desert?</p>
+      <ul class="quiz-options">
+        <li><button class="quiz-option-btn" data-q="3" data-i="0" onclick="pickOption(this)"><span class="option-icon">A</span>Rice</button></li>
+        <li><button class="quiz-option-btn" data-q="3" data-i="1" onclick="pickOption(this)"><span class="option-icon">B</span>Corn</button></li>
+        <li><button class="quiz-option-btn" data-q="3" data-i="2" onclick="pickOption(this)"><span class="option-icon">C</span>Wheat</button></li>
+        <li><button class="quiz-option-btn" data-q="3" data-i="3" onclick="pickOption(this)"><span class="option-icon">D</span>Potatoes</button></li>
+      </ul>
+      <div class="quiz-feedback fb-correct" id="fb3-correct">Correct — wheat is the crop cited as a major consumer of desert water resources.</div>
+      <div class="quiz-feedback fb-wrong" id="fb3-wrong">Not quite. Think about which staple crop Saudi Arabia famously tried to grow at scale.</div>
+    </div>
+
+    <!-- Q4: Short answer -->
+    <div class="quiz-q" id="q4">
+      <span class="quiz-q-num">Question 4 of 7 &nbsp;·&nbsp; <em style="color:rgba(245,239,227,0.45);font-style:italic;font-size:12px;letter-spacing:0.05em;">Short answer</em></span>
+      <p class="quiz-q-text">What two options are presented to the viewer in the middle of the video? Describe both Option A and Option B.</p>
+      <div class="short-answer-wrap">
+        <textarea class="short-answer-input" id="sa4" placeholder="Write your answer here…"></textarea>
+        <button class="short-answer-submit" id="sa4-btn" onclick="revealShort(4)">Reveal model answer</button>
+      </div>
+      <div class="model-answer" id="ma4">
+        <strong>Model Answer</strong>
+        <ul>
+          <li><strong>Option A:</strong> Continue using fossil aquifers to support local farming and food independence.</li>
+          <li><strong>Option B:</strong> Reduce groundwater use and rely more on desalination and imported food.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-q" id="q5">
+      <span class="quiz-q-num">Question 5 of 7</span>
+      <p class="quiz-q-text">What appears on the screen while the speaker talks about finding a smarter balance?</p>
+      <ul class="quiz-options">
+        <li><button class="quiz-option-btn" data-q="5" data-i="0" onclick="pickOption(this)"><span class="option-icon">A</span>A world map</button></li>
+        <li><button class="quiz-option-btn" data-q="5" data-i="1" onclick="pickOption(this)"><span class="option-icon">B</span>A balanced scale showing sustainability vs short-term gain</button></li>
+        <li><button class="quiz-option-btn" data-q="5" data-i="2" onclick="pickOption(this)"><span class="option-icon">C</span>A rainfall chart</button></li>
+        <li><button class="quiz-option-btn" data-q="5" data-i="3" onclick="pickOption(this)"><span class="option-icon">D</span>A factory diagram</button></li>
+      </ul>
+      <div class="quiz-feedback fb-correct" id="fb5-correct">Correct — a balanced scale appears to illustrate the trade-off between sustainability and short-term gain.</div>
+      <div class="quiz-feedback fb-wrong" id="fb5-wrong">Not quite. What visual metaphor would best represent balance?</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-q" id="q6">
+      <span class="quiz-q-num">Question 6 of 7</span>
+      <p class="quiz-q-text">What exact phrase is used to describe aquifers near the end of the explanation?</p>
+      <ul class="quiz-options">
+        <li><button class="quiz-option-btn" data-q="6" data-i="0" onclick="pickOption(this)"><span class="option-icon">A</span>Natural storage systems</button></li>
+        <li><button class="quiz-option-btn" data-q="6" data-i="1" onclick="pickOption(this)"><span class="option-icon">B</span>Emergency backup</button></li>
+        <li><button class="quiz-option-btn" data-q="6" data-i="2" onclick="pickOption(this)"><span class="option-icon">C</span>Strategic reserves</button></li>
+        <li><button class="quiz-option-btn" data-q="6" data-i="3" onclick="pickOption(this)"><span class="option-icon">D</span>Water banks</button></li>
+      </ul>
+      <div class="quiz-feedback fb-correct" id="fb6-correct">Correct — aquifers are described as "strategic reserves" near the end of the video.</div>
+      <div class="quiz-feedback fb-wrong" id="fb6-wrong">Not quite. Think about the language used around national resource planning.</div>
+    </div>
+
+    <!-- Q7: Short answer -->
+    <div class="quiz-q" id="q7">
+      <span class="quiz-q-num">Question 7 of 7 &nbsp;·&nbsp; <em style="color:rgba(245,239,227,0.45);font-style:italic;font-size:12px;letter-spacing:0.05em;">Short answer</em></span>
+      <p class="quiz-q-text">Name one specific solution mentioned in the video to reduce water usage.</p>
+      <div class="short-answer-wrap">
+        <textarea class="short-answer-input" id="sa7" placeholder="Write your answer here…"></textarea>
+        <button class="short-answer-submit" id="sa7-btn" onclick="revealShort(7)">Reveal model answer</button>
+      </div>
+      <div class="model-answer" id="ma7">
+        <strong>Acceptable Answers — any one of:</strong>
+        <ul>
+          <li>Using drip irrigation systems</li>
+          <li>Growing less water-intensive crops</li>
+          <li>Limiting groundwater extraction</li>
+          <li>Investing in renewable-powered desalination</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Score summary -->
+    <div class="quiz-score-bar" id="quiz-score">
+      <span class="score-label">Your Result</span>
+      <div class="score-headline" id="score-headline">—</div>
+      <div class="score-sub" id="score-sub"></div>
+      <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+      <button class="retry-btn" onclick="retryQuiz()">Try again</button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // correct option index (0-based) for each MC question
+  const ANSWERS = { 1: 1, 2: 1, 3: 2, 5: 1, 6: 2 };
+  const mcScores = { 1: null, 2: null, 3: null, 5: null, 6: null };
+  const shortDone = { 4: false, 7: false };
+
+  function pickOption(btn) {
+    const q = parseInt(btn.dataset.q);
+    const i = parseInt(btn.dataset.i);
+    const allBtns = document.querySelectorAll(`.quiz-option-btn[data-q="${q}"]`);
+
+    // Disable all buttons for this question
+    allBtns.forEach(b => b.disabled = true);
+
+    const correct = ANSWERS[q];
+    const isCorrect = i === correct;
+
+    // Style chosen button
+    btn.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+    btn.querySelector('.option-icon').textContent = isCorrect ? '✓' : '✗';
+
+    // If wrong, reveal the correct one
+    if (!isCorrect) {
+      allBtns[correct].classList.add('reveal-correct');
+      allBtns[correct].querySelector('.option-icon').textContent = '✓';
+    }
+
+    // Show feedback
+    const fbCorrect = document.getElementById(`fb${q}-correct`);
+    const fbWrong = document.getElementById(`fb${q}-wrong`);
+    if (isCorrect) { fbCorrect.classList.add('show'); }
+    else { fbWrong.classList.add('show'); }
+
+    mcScores[q] = isCorrect ? 1 : 0;
+    checkAllDone();
+  }
+
+  function revealShort(n) {
+    const input = document.getElementById(`sa${n}`);
+    const btn = document.getElementById(`sa${n}-btn`);
+    const ma = document.getElementById(`ma${n}`);
+
+    if (!input.value.trim()) {
+      input.style.borderColor = 'rgba(200,80,60,0.5)';
+      input.placeholder = 'Please write something first…';
+      return;
+    }
+
+    input.disabled = true;
+    btn.disabled = true;
+    btn.textContent = 'Answer revealed';
+    ma.classList.add('show');
+    shortDone[n] = true;
+    checkAllDone();
+  }
+
+  function checkAllDone() {
+    const mcDone = Object.values(mcScores).every(v => v !== null);
+    const sDone = Object.values(shortDone).every(v => v);
+    if (!mcDone || !sDone) return;
+
+    const total = Object.values(mcScores).reduce((a, b) => a + b, 0);
+    const max = 5;
+    const pct = Math.round((total / max) * 100);
+
+    const bar = document.getElementById('quiz-score');
+    const headline = document.getElementById('score-headline');
+    const sub = document.getElementById('score-sub');
+    const fill = document.getElementById('score-fill');
+
+    headline.textContent = `${total} / ${max} on the multiple choice`;
+
+    if (pct === 100) sub.textContent = 'Perfect score. You were paying close attention.';
+    else if (pct >= 60) sub.textContent = 'Good effort. Review the questions you missed and rewatch if needed.';
+    else sub.textContent = 'Worth rewatching the video — the answers are all in there.';
+
+    bar.classList.add('show');
+    setTimeout(() => { fill.style.width = pct + '%'; }, 80);
+    bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function retryQuiz() {
+    // Reset MC
+    Object.keys(mcScores).forEach(q => { mcScores[q] = null; });
+    document.querySelectorAll('.quiz-option-btn').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('correct-answer', 'wrong-answer', 'reveal-correct');
+      b.querySelector('.option-icon').textContent = b.querySelector('.option-icon').textContent.replace('✓','').replace('✗','') || ['A','B','C','D'][parseInt(b.dataset.i)];
+    });
+    // Reset letters properly
+    document.querySelectorAll('.quiz-option-btn').forEach(b => {
+      b.querySelector('.option-icon').textContent = ['A','B','C','D'][parseInt(b.dataset.i)];
+    });
+    document.querySelectorAll('.quiz-feedback').forEach(f => f.classList.remove('show'));
+
+    // Reset short answers
+    Object.keys(shortDone).forEach(n => { shortDone[n] = false; });
+    [4, 7].forEach(n => {
+      const input = document.getElementById(`sa${n}`);
+      const btn = document.getElementById(`sa${n}-btn`);
+      const ma = document.getElementById(`ma${n}`);
+      input.disabled = false;
+      input.value = '';
+      input.style.borderColor = '';
+      input.placeholder = 'Write your answer here…';
+      btn.disabled = false;
+      btn.textContent = 'Reveal model answer';
+      ma.classList.remove('show');
+    });
+
+    // Reset score
+    document.getElementById('quiz-score').classList.remove('show');
+    document.getElementById('score-fill').style.width = '0%';
+
+    document.getElementById('q1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+<!-- FOOTER: REFERENCES -->
+<footer id="footer">
+  <div class="section-inner">
+    <p class="footer-heading">References</p>
+    <div class="refs-grid">
+      <div class="ref-item">
+        Alodah, A. (2023) 'Towards sustainable water resources management considering climate change in the case of Saudi Arabia'. <em>Sustainability</em>. 15(20). doi: <a href="https://doi.org/10.3390/su152014674" target="_blank">https://doi.org/10.3390/su152014674</a>
+      </div>
+      <div class="ref-item">
+        Al-Ibrahim, A.M. (2013) Seawater Desalination: The Strategic Choice for Saudi Arabia. <em>Desalination Water Treatment</em>, 51, pp. 1–4. doi: <a href="https://doi.org/10.1080/19443994.2012.704744" target="_blank">https://doi.org/10.1080/19443994.2012.704744</a>
+      </div>
+      <div class="ref-item">
+        Baig MB, Alotibi Y, Gary S. Straquadine., Abed Alataway. (2020) 'Water Resources in the Kingdom of Saudi Arabia: Challenges and Strategies for Improvement'. <em>Water Policies in MENA Countries, Global Issues in Water Policy</em>. doi: <a href="https://doi.org/10.1007/978-3-030-29274-4_7" target="_blank">https://doi.org/10.1007/978-3-030-29274-4_7</a>
+      </div>
+      <div class="ref-item">
+        CNBC (2025). How Saudi Arabia is diversifying away from oil — and betting big on AI, 27 October. Available at: <a href="https://www.cnbc.com/2025/10/28/how-saudi-arabia-is-diversifying-away-from-oil-and-betting-big-on-ai.html" target="_blank">https://www.cnbc.com/2025/10/28/...</a> [Accessed: 6 February 2026].
+      </div>
+      <div class="ref-item">
+        D'Agostino, D., Al-Memari, M. and Burt, J.A. (2025) 'Evolution of desalination research and water production in the Middle East: a five-decade perspective'. <em>Frontiers in Water</em>. 7. doi: <a href="https://doi.org/10.3389/frwa.2025.1672360" target="_blank">https://doi.org/10.3389/frwa.2025.1672360</a>
+      </div>
+      <div class="ref-item">
+        General Statistics Authority (2023). <em>Environmental statistics. Water Accounts Publication</em>. Available at: <a href="https://www.stats.gov.sa/documents/20117/2435281/Water+Accounts+Publication+2023+EN.pdf/11312e80-41b6-1eb0-a14f-177a790590e9?t=1735923570932" target="_blank">stats.gov.sa [Water Accounts 2023]</a>
+      </div>
+      <div class="ref-item">
+        General Statistics Authority (2024b). <em>Agricultural Statistics Publication</em>. Available at: <a href="https://www.stats.gov.sa/documents/20117/2435281/Agricultural+Statistics+2024++-+EN.pdf/1d9fef9e-4238-e4c7-4c41-86475ce8241c?t=1764479027952" target="_blank">stats.gov.sa [Agricultural Statistics 2024]</a>
+      </div>
+      <div class="ref-item">
+        Investopedia (2021). Leading countries worldwide based on natural resource value as of 2021 (in trillion U.S. dollars). <em>Statista</em>. Accessed: February 09, 2026. <a href="https://www.statista.com/statistics/748223/leading-countries-based-on-natural-resource-value/" target="_blank">https://www.statista.com/statistics/748223/...</a>
+      </div>
+      <div class="ref-item">
+        Karam S (2008) Saudi Arabia scraps wheat growing to save water. <em>Reuters</em>. Available at: <a href="https://www.reuters.com/article/instant-article/idUSL08699206" target="_blank">https://www.reuters.com/article/instant-article/idUSL08699206</a> [Accessed: 7 February 2026].
+      </div>
+      <div class="ref-item">
+        Ouda, O.K.M. (2013) 'Water demand versus supply in Saudi Arabia: current and future challenges'. <em>International Journal of Water Resources Development</em>. 30(2), pp. 335–344. doi: <a href="https://doi.org/10.1080/07900627.2013.837363" target="_blank">https://doi.org/10.1080/07900627.2013.837363</a>
+      </div>
+      <div class="ref-item">
+        Suhail, M. et al. (2024) 'Issues of water resources in Saudi Arabia: past, present, and future'. <em>Sustainability</em>. 16(10). doi: <a href="https://doi.org/10.3390/su16104189" target="_blank">https://doi.org/10.3390/su16104189</a>
+      </div>
+    </div>
+    <div class="footer-bottom">Agriculture in an Arid Kingdom &nbsp;·&nbsp; A Documentary Study of Saudi Arabian Water &amp; Agriculture Policy</div>
+  </div>
+</footer>
+
+</body>
+</html>
